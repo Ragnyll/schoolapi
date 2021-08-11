@@ -1,4 +1,4 @@
-use super::models::schema::school;
+use super::schema::school;
 
 #[derive(Queryable, Debug)]
 pub struct School {

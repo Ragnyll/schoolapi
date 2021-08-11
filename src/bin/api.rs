@@ -1,44 +1,21 @@
 #[macro_use]
 extern crate rocket;
 
-use schoolapi::models::schema::school::dsl::*;
+use rocket_sync_db_pools::database;
+use rocket_sync_db_pools::diesel::RunQueryDsl;
 
-use rocket_sync_db_pools::{diesel, database};
-use schoolapi::thing::School;
+use schoolapi::models::school::School;
+use schoolapi::models::schema::school::dsl::school;
 
+// Pooled sql connection for the school_db
 #[database("postgresql_schooldb")]
 struct SchoolDbConn(diesel::PgConnection);
 
-use rocket_sync_db_pools::diesel::RunQueryDsl;
 
 #[get("/schools")]
 async fn all_schools(conn: SchoolDbConn) -> &'static str {
     let content = conn.run(|c| school.load::<School>(c)).await.expect("couldnt load");
     println!("{:?}", content);
-
-    // let connection = establish_connection();
-
-    // let new_school = NewSchool {
-    // name: "street styles",
-    // };
-
-    // diesel::insert_into(school::table)
-    // .values(&new_school)
-    // .get_result::<School>(&connection)
-    // .expect("Error saving new post");
-
-    // let results = school
-        // .limit(5)
-        // .load::<School>(&connection)
-        // .expect("Error loading school");
-
-    // println!("Displaying {} schools", results.len());
-
-    // for result in results {
-        // println!("{}", result.id);
-        // println!("----------\n");
-        // println!("{}", result.name);
-    // }
     "Hello world"
 }
 

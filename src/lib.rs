@@ -1,5 +1,4 @@
 pub mod models;
-pub mod thing;
 
 #[macro_use]
 extern crate diesel;

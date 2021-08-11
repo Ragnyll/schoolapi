@@ -1,9 +1,10 @@
 extern crate diesel;
 extern crate schoolapi;
 
-use self::schoolapi::*;
-use self::thing::*;
 use self::diesel::prelude::*;
+
+use self::schoolapi::establish_connection;
+use self::schoolapi::models::school::{School, NewSchool};
 
 fn main() {
     use schoolapi::models::schema::school::dsl::*;
