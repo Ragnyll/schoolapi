@@ -1,13 +1,10 @@
 #[macro_use]
 extern crate rocket;
 
-use schoolapi::schema::school::dsl::*;
-use self::diesel::prelude::*;
+use schoolapi::models::schema::school::dsl::*;
 
 use rocket_sync_db_pools::{diesel, database};
-use schoolapi::schema::school::dsl::*;
-use schoolapi::schema::school;
-use schoolapi::models::School;
+use schoolapi::thing::School;
 
 #[database("postgresql_schooldb")]
 struct SchoolDbConn(diesel::PgConnection);
