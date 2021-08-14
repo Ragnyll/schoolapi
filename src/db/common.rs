@@ -1,21 +1,11 @@
-// `error_chain!` can recurse deeply
-#![recursion_limit = "1024"]
+use std::env;
 
-pub mod models;
-pub mod db;
-
-#[macro_use]
-extern crate error_chain;
-
-#[macro_use]
-extern crate diesel;
-extern crate dotenv;
-
+// diesel prelude adds the establish_connection to the PgConnection
 use diesel::prelude::*;
 use diesel::pg::PgConnection;
 use dotenv::dotenv;
-use std::env;
 
+// TODO: Have this chain error
 pub fn establish_connection() -> PgConnection {
     dotenv().ok();
 
@@ -23,8 +13,4 @@ pub fn establish_connection() -> PgConnection {
         .expect("DATABASE_URL must be set");
     PgConnection::establish(&database_url)
         .expect(&format!("Error connecting to {}", database_url))
-}
-
-pub mod errors {
-    error_chain! {}
 }

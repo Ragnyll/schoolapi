@@ -3,19 +3,19 @@
 extern crate diesel;
 extern crate schoolapi;
 
-use self::diesel::prelude::*;
+use schoolapi::db::{common, school};
 
 #[path="db_util_cli/cli_parser.rs"]
 mod cli_parser;
 use cli_parser::DBOperation;
 
-use self::schoolapi::establish_connection;
-use self::schoolapi::models::school::{School, NewSchool};
 
 fn main() {
-    let operation_type = cli_parser::parse_line();
-    match operation_type {
-        DBOperation::NewRowOp(ot) => println!("im gonna create a new row with the operation {:?}", ot),
+    let conn = common::establish_connection();
+    let operation = cli_parser::parse_line();
+
+    match operation {
+        DBOperation::NewRowOp(_) => school::create_school(conn),
         DBOperation::ListAllTables => println!("im gonna list all the tables"),
     }
 
