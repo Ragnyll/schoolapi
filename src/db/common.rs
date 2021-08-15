@@ -5,7 +5,6 @@ use diesel::prelude::*;
 use diesel::pg::PgConnection;
 use dotenv::dotenv;
 
-// TODO: Have this chain error
 pub fn establish_connection() -> PgConnection {
     dotenv().ok();
 

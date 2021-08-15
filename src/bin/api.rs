@@ -1,8 +1,6 @@
 #[macro_use]
 extern crate rocket;
 
-use schoolapi::errors::*;
-
 use rocket_sync_db_pools::database;
 use rocket_sync_db_pools::diesel::RunQueryDsl;
 
@@ -23,23 +21,15 @@ async fn all_schools(conn: SchoolDbConn) -> &'static str {
 
 #[rocket::main]
 async fn main() {
-    if let Err(ref e) = start_api().await {
-            use error_chain::ChainedError;
-            use std::io::Write; // trait which holds `display_chain`
-            let stderr = &mut ::std::io::stderr();
-            let errmsg = "Error writing to stderr";
-
-            writeln!(stderr, "{}", e.display_chain()).expect(errmsg);
-            ::std::process::exit(1);
-    }
+    start_api().await.expect("Failed to start api");
 }
 
-async fn start_api() -> Result<()> {
+async fn start_api() -> Result<(), rocket::Error> {
     rocket::build()
         .attach(SchoolDbConn::fairing())
         .mount("/", routes![all_schools])
         .launch()
-        .await.chain_err(|| "unable to open start api")?;
+        .await?;
 
     Ok(())
 }

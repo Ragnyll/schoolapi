@@ -5,6 +5,8 @@ use clap::{App, Arg};
 pub enum DBOperation {
     /// Create a new row in the specified table
     NewRowOp(Vec<String>),
+    /// Select * from table
+    SelectTable(String),
     /// List all tables in database
     ListAllTables,
 }
@@ -23,7 +25,9 @@ pub fn parse_line() -> DBOperation {
                         .multiple(true)
                 ),
         )
-        .subcommand(App::new("list-tables"))
+        .subcommand(App::new("list-tables").about("list all the tables in the database"))
+        .subcommand(App::new("select-table").about("select all the rows in the given table")
+            .arg(Arg::new("select-table-value")))
         .get_matches();
 
     match matches.subcommand() {
@@ -31,21 +35,24 @@ pub fn parse_line() -> DBOperation {
             match new_row_command_args.values_of_lossy("new-row-values") {
                 Some(values) => DBOperation::NewRowOp(values),
                 // Let the new row handle figure out what to do with the empty array
-                _ => DBOperation::NewRowOp(vec![])
+                _ => DBOperation::NewRowOp(vec![]),
             }
-        },
+        }
 
         Some(("list-tables", _)) => DBOperation::ListAllTables,
 
-        // This should be some unknown command error
-        _ => DBOperation::ListAllTables
-    }
+        Some(("select-table", table)) => {
+            match table.value_of("select-table-value") {
+                Some(value) => DBOperation::SelectTable(String::from(value)),
+                // Let the new row handle figure out what to do with the empty array
+                _ => {
+                    // TODO: this should be a bad error
+                    DBOperation::ListAllTables
+                }
+            }
+        }
 
-    // if matches.is_present("new-row") {
-        // return DBOperation::NewRowOp(matches.values_of_lossy("new-row").unwrap());
-    // }
-    // match matches.expect("subcommand required for db_util") {
-    // ("new", _new_matches)  => DBOperation::NewRowOp,
-    // _ => panic!("Specified command not found"),
-    // }
+        // TODO: This should be some unknown command error
+        _ => DBOperation::ListAllTables,
+    }
 }
