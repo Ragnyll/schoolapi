@@ -1,23 +1,7 @@
 #[macro_use]
 extern crate rocket;
 
-use rocket_sync_db_pools::database;
-use rocket_sync_db_pools::diesel::RunQueryDsl;
-
-use schoolapi::models::school::School;
-use schoolapi::models::schema::school::dsl::school;
-
-// Pooled sql connection for the school_db
-#[database("postgresql_schooldb")]
-struct SchoolDbConn(diesel::PgConnection);
-
-
-#[get("/schools")]
-async fn all_schools(conn: SchoolDbConn) -> &'static str {
-    let content = conn.run(|c| school.load::<School>(c)).await.expect("couldnt load");
-    println!("{:?}", content);
-    "Hello world"
-}
+use schoolapi::api;
 
 #[rocket::main]
 async fn main() {
@@ -26,8 +10,8 @@ async fn main() {
 
 async fn start_api() -> Result<(), rocket::Error> {
     rocket::build()
-        .attach(SchoolDbConn::fairing())
-        .mount("/", routes![all_schools])
+        .attach(api::school_endpoints::SchoolDbConn::fairing())
+        .mount("/", routes![api::school_endpoints::all_schools])
         .launch()
         .await?;
 
