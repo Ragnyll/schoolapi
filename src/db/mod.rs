@@ -1,2 +1,2 @@
-pub mod school;
 pub mod common;
+pub mod school;

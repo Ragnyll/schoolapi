@@ -1,5 +1,4 @@
 /// Common db connection operation for managing schools
-
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
 
@@ -12,8 +11,8 @@ pub fn create_school(conn: PgConnection) -> Result<(), diesel::result::Error> {
     };
 
     diesel::insert_into(school::table)
-    .values(&new_school)
-    .get_result::<School>(&conn)?;
+        .values(&new_school)
+        .get_result::<School>(&conn)?;
 
     Ok(())
 }
