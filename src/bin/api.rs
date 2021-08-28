@@ -10,7 +10,7 @@ async fn main() {
 
 async fn start_api() -> Result<(), rocket::Error> {
     rocket::build()
-        .attach(api::school_endpoints::SchoolDbConn::fairing())
+        .attach(api::db_connections::SchoolDbConn::fairing())
         .mount("/", routes![api::school_endpoints::all_schools])
         .launch()
         .await?;
