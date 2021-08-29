@@ -29,9 +29,11 @@ pub async fn all_schools(conn: db_connections::SchoolDbConn) -> Option<Json<Vec<
     Some(Json(content))
 }
 
-
 #[get("/schools/<id>")]
-pub async fn get_school_by_id(conn: db_connections::SchoolDbConn, id: i32) -> Option<Json<Vec<School>>> {
+pub async fn get_school_by_id(
+    conn: db_connections::SchoolDbConn,
+    id: i32,
+) -> Option<Json<Vec<School>>> {
     // school::table.find(id).first(&conn);
     let content = conn
         //TODO: this move is pretty suspicous
