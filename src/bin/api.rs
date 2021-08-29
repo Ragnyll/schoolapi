@@ -15,7 +15,8 @@ async fn start_api() -> Result<(), rocket::Error> {
             "/",
             routes![
                 api::school_endpoints::all_schools,
-                api::school_endpoints::get_school_by_id
+                api::school_endpoints::get_school_by_id,
+                api::school_endpoints::create_school,
             ],
         )
         .launch()
