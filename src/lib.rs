@@ -1,3 +1,4 @@
+#![recursion_limit="2048"]
 pub mod api;
 pub mod db;
 pub mod models;

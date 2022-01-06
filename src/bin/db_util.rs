@@ -14,7 +14,8 @@ fn main() {
 
     match operation {
         DBOperation::NewRowOp(_) => {
-            school::create_school(conn).expect("Failed to create new row in table")
+            ()
+            // school::create_school(conn).expect("Failed to create new row in table")
         }
         DBOperation::SelectTable(_) => println!("im gonna select all the tables"),
         DBOperation::ListAllTables => println!("im gonna list all the tables"),
